@@ -41,6 +41,7 @@ function handleClick(index){
             currentPlayer = "X";
         }   
         checkGameOver(); 
+        gridFilled();
 
         gameInfo.innerText = `Current Player - ${currentPlayer}`;
     }
@@ -54,8 +55,34 @@ boxes.forEach((box, index) =>{
 
 
 function checkGameOver(){
+    winningPositions.forEach((position)=>{
+        if((gameGrid[position[0]] != "" && gameGrid[position[1]] != "" && gameGrid[position[2]] != "" ) && 
+        (gameGrid[position[0]] === gameGrid[position[1]] && gameGrid[position[1]] === gameGrid[position[2]])){
+            boxes[position[0]].classList.add('win');
+            boxes[position[1]].classList.add('win');
+            boxes[position[2]].classList.add('win');
 
-    newGameBtn.classList.add('active');
+            boxes.forEach((box)=>{
+                box.style.pointerEvents ='none';
+            });
+
+            newGameBtn.classList.add('active');
+
+        }
+    })
+
+
+}
+function gridFilled(){
+    if(gameGrid.includes("")){
+        return;
+    }
+    else{
+        boxes.forEach((box)=>{
+            box.style.pointerEvents ='none';
+        });
+        newGameBtn.classList.add('active');
+    }
 }
 
 newGameBtn.addEventListener('click',()=>{
@@ -63,8 +90,10 @@ newGameBtn.addEventListener('click',()=>{
     boxes.forEach((box)=>{
         box.innerHTML = "";
         box.style.pointerEvents ='all';
+        box.classList.remove('win');
     });
     newGameBtn.classList.remove('active');
+    boxes.classList.remove('win');
 });
 
 
